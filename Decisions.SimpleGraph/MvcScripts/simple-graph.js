@@ -47,14 +47,13 @@ $DP.Control.SimpleGraphControl = class SimpleGraphControl
     // ── Rendering ────────────────────────────────────────────────────────────────
 
     renderhtml(host) {
-        // flex:1 + min-height:0 makes this div fill the remaining height of the
-        // section's flex column (section = label + our root).  ResizeObserver then
-        // reads the actual rendered pixel size and re-renders the SVG to match.
+        const h = (this.options && this.options.graphHeight) || 300;
+
         const $root = $('<div>')
             .addClass('sgc-root')
-            .css({ position: 'relative', flex: '1 1 0', minHeight: '0',
-                   width: '100%', overflow: 'hidden',
-                   fontFamily: 'Arial,sans-serif', boxSizing: 'border-box' });
+            .css({ position: 'relative', width: '100%', height: h + 'px',
+                   overflow: 'hidden', fontFamily: 'Arial,sans-serif',
+                   boxSizing: 'border-box' });
 
         const $inner = $('<div>')
             .attr('id', this._uid + '-inner')

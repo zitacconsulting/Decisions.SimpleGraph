@@ -85,6 +85,7 @@ namespace Decisions.SimpleGraph
         private bool     _showAverageLine = true;
         private bool     _showDataPoints  = true;
         private bool     _showAreaFill    = true;
+        private int      _graphHeight     = 300;
 
         // ── Data Source ───────────────────────────────────────────────────────────
         // StaticInput (from Common Properties) is the Decisions-native toggle:
@@ -142,6 +143,15 @@ namespace Decisions.SimpleGraph
         {
             get => _showAreaFill;
             set { _showAreaFill = value; OnPropertyChanged(nameof(ShowAreaFill)); }
+        }
+
+        // ── Layout ────────────────────────────────────────────────────────────────
+
+        [WritableValue][ClientOption][PropertyClassification(0, "Graph Height (px)", "Layout")]
+        public int GraphHeight
+        {
+            get => _graphHeight;
+            set { _graphHeight = value < 60 ? 60 : value; OnPropertyChanged(nameof(GraphHeight)); }
         }
 
         [WritableValue][ClientOption][PropertyClassification(5, "X Labels From Data", "Appearance")]
