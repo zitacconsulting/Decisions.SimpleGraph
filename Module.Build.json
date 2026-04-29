@@ -1,0 +1,26 @@
+{
+    "Resources": {
+        "NoComponents": true,
+        "CoreServicesDlls": [
+            "./Decisions.SimpleGraph/bin/Decisions.SimpleGraph.dll"
+        ],
+        "ReferenceDlls": null,
+        "CustomImages": [
+            "SimpleGraph.png"
+        ],
+        "CliDlls": null,
+        "WebPages": null,
+        "MvcScripts": [
+            "./Decisions.SimpleGraph/MvcScripts/simple-graph.js"
+        ],
+        "SilverlightDlls": null,
+        "AgentDlls": null,
+        "InstallScript": null,
+        "SqlScripts": null,
+        "ObjectsToImport": null,
+        "MsSqlScript": null
+    },
+    "Version": "9.21.0",
+    "ImagePath": "SimpleGraph.png",
+    "Description": "Simple Graph is an SVG area/line chart form control for the Decisions platform. It renders a line chart with optional gradient fill, data-point markers, and a dashed average line. Both Y values (double[]) and X labels (string[]) can be bound to flow data at runtime or configured statically at design time. X-axis labels are automatically thinned when there are too many data points to display comfortably. The graph color, Y-axis suffix, and chart height are all configurable."
+}
