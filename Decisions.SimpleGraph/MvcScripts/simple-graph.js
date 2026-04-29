@@ -253,8 +253,13 @@ $DP.Control.SimpleGraphControl = class SimpleGraphControl
 
         // ── Dots ──────────────────────────────────────────────────────────────────
         const dots = showDots
-            ? data.map((v, i) => '<circle cx="' + gx(i) + '" cy="' + gy(v) + '" r="2.5" fill="' + color + '" opacity=".85"/>').join('')
+            ? data.map((v, i) => '<circle cx="' + gx(i) + '" cy="' + gy(v) + '" r="2.5" fill="' + color + '" opacity=".85" style="pointer-events:none"/>').join('')
             : '';
+
+        // ── Hit areas (invisible, sit on top to capture hover) ────────────────────
+        const hits = data.map((v, i) =>
+            '<circle class="sgc-hit" data-i="' + i + '" cx="' + gx(i) + '" cy="' + gy(v) + '" r="8" fill="transparent" style="cursor:crosshair"/>'
+        ).join('');
 
         // ── Axes ──────────────────────────────────────────────────────────────────
         const yAxis = '<line x1="' + pL + '" y1="' + pT + '" x2="' + pL + '" y2="' + (pT + cH) + '" stroke="#ddd"/>';
@@ -277,9 +282,42 @@ $DP.Control.SimpleGraphControl = class SimpleGraphControl
             xLabels +
             yAxis +
             xAxis +
+            hits +
             '</svg>';
 
-        this._container.innerHTML = svg;
+        this._container.innerHTML =
+            svg +
+            '<div class="sgc-tip" style="display:none;position:absolute;pointer-events:none;' +
+            'background:#fff;border:1px solid #ddd;border-radius:4px;padding:4px 8px;' +
+            'font-size:11px;line-height:1.6;box-shadow:0 2px 6px rgba(0,0,0,.12);' +
+            'white-space:nowrap;z-index:10;"></div>';
+
+        // ── Tooltip events ────────────────────────────────────────────────────────
+        const tip = this._container.querySelector('.sgc-tip');
+        this._container.querySelectorAll('.sgc-hit').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                const i   = parseInt(el.getAttribute('data-i'), 10);
+                const v   = data[i];
+                const lbl = (labels[i] != null && labels[i] !== '') ? labels[i] : String(i + 1);
+                const cx  = parseFloat(el.getAttribute('cx'));
+                const cy  = parseFloat(el.getAttribute('cy'));
+                tip.innerHTML =
+                    '<strong>' + this._esc((Math.round(v * 100) / 100) + suffix) + '</strong>' +
+                    '<br><span style="color:#999;font-size:10px">' + this._esc(lbl) + '</span>';
+                tip.style.display = 'block';
+                const tw = tip.offsetWidth;
+                const th = tip.offsetHeight;
+                let tx = cx - tw / 2;
+                let ty = cy - th - 10;
+                tx = Math.max(2, Math.min(tx, W - tw - 2));
+                if (ty < 2) ty = cy + 12;
+                tip.style.left = tx + 'px';
+                tip.style.top  = ty + 'px';
+            });
+            el.addEventListener('mouseleave', () => {
+                tip.style.display = 'none';
+            });
+        });
     }
 
     // ── Utility ───────────────────────────────────────────────────────────────────
